@@ -99,6 +99,6 @@ class ProductList extends StatelessWidget {
         description: "vöptgöptrög",
         Price: 300,
         imageUrl:
-            "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg");
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyTWvWDSbt3axaa6hjmO6UXV9JiSm6yjBf0w&s");
   }
 }
