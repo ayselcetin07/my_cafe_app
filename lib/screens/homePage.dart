@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_cafe_app/screens/ProductList.dart';
 import 'package:my_cafe_app/screens/category_list_screen.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 

@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const orderRoutes = require('./routes/orderRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const menuRoutes = require('./routes/menuRoutes');
 
 const app = express();
 
@@ -23,5 +24,6 @@ db.once("open", () => {
 
 app.use('/orders', orderRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/menu', menuRoutes);
 
 module.exports = app;

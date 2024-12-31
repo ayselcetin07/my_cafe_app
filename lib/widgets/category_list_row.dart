@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_cafe_app/screens/menu.dart';
-import 'package:my_cafe_app/utilities/constants.dart';
+import 'package:my_cafe_app/screens/menu_screen.dart';
 
 class CategoryListRow extends StatelessWidget {
   final String name;
@@ -19,7 +18,8 @@ class CategoryListRow extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Menu()),
+            MaterialPageRoute(
+                builder: (context) => MenuScreen(selectedCategory: name)),
           );
         },
         child: Card(
@@ -45,7 +45,7 @@ class CategoryListRow extends StatelessWidget {
                 child: Center(
                   // Yazıyı ortalamak için Center widget'ı ekledik
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: Text(
                       name,
                       style: TextStyle(
