@@ -3,19 +3,12 @@ import 'package:my_cafe_app/models/cart.dart';
 import 'package:my_cafe_app/screens/cartPage.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:my_cafe_app/models/menuItem.dart';
 
 class ProductDetail extends StatefulWidget {
-  final String name;
-  final String description;
-  final double price;
-  final String imageUrl;
+  final MenuItem menuItem;
 
-  ProductDetail({
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.imageUrl,
-  });
+  ProductDetail({required this.menuItem});
 
   @override
   State<StatefulWidget> createState() => _ProductDetailState();
@@ -43,29 +36,31 @@ class _ProductDetailState extends State<ProductDetail> {
               color: AppColors.kirikbeyaz, fontFamily: "Times New Roman"),
         ),
       ),
-      body: _buildProductDetail(context),
+      body: Container(
+        color: Colors.amber[50],
+        child: _buildProductDetail(context, widget.menuItem),
+      ),
       bottomNavigationBar: _buildBottomBar(),
     );
   }
 
-  _buildProductDetail(BuildContext context) {
+  Widget _buildProductDetail(BuildContext context, MenuItem product) {
     Size size = MediaQuery.of(context).size;
     return ListView(
       children: [
         Container(
-          color: Colors.amber[50],
           padding: EdgeInsets.all(4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProductImage(),
-              _buildProductTitle(),
+              _buildProductImage(product.imageUrl),
+              _buildProductTitle(product.name),
               SizedBox(height: 12.0),
-              _buildProductPrice(),
+              _buildProductPrice(product.price),
               SizedBox(height: 12.0),
               _buildDivider(size),
               SizedBox(height: 12.0),
-              _buildFurtherInfo(),
+              _buildFurtherInfo(product.description),
               SizedBox(height: 12.0),
               _buildDivider(size),
               SizedBox(height: 12.0),
@@ -80,7 +75,7 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  _buildProductImage() {
+  Widget _buildProductImage(String imageUrl) {
     return Container(
       color: Colors.amber[50],
       child: Padding(
@@ -88,8 +83,8 @@ class _ProductDetailState extends State<ProductDetail> {
         child: Container(
           height: 225.0,
           child: Center(
-            child: Image.network(
-              widget.imageUrl,
+            child: Image.asset(
+              imageUrl,
             ),
           ),
         ),
@@ -97,14 +92,14 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  _buildProductTitle() {
+  Widget _buildProductTitle(String name) {
     return Container(
       color: Color(0xFFCDAA7D),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0),
         child: Center(
           child: Text(
-            widget.name,
+            name,
             style: TextStyle(
                 fontSize: 20.0,
                 color: Colors.black,
@@ -116,14 +111,14 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  _buildProductPrice() {
+  Widget _buildProductPrice(double price) {
     return Container(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0),
         child: Row(
           children: [
             Text(
-              "${widget.price.toStringAsFixed(2)} TL",
+              "${price.toStringAsFixed(2)} TL",
               style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.red,
@@ -137,7 +132,7 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  _buildDivider(Size screenSize) {
+  Widget _buildDivider(Size screenSize) {
     return Column(
       children: [
         Container(
@@ -149,7 +144,7 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  _buildFurtherInfo() {
+  Widget _buildFurtherInfo(String description) {
     return Container(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0),
@@ -157,12 +152,14 @@ class _ProductDetailState extends State<ProductDetail> {
           children: [
             Icon(Icons.local_offer),
             SizedBox(width: 10.0),
-            Text(
-              widget.description,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontFamily: "Times New Roman",
-                color: Colors.brown,
+            Expanded(
+              child: Text(
+                description,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontFamily: "Times New Roman",
+                  color: Colors.brown,
+                ),
               ),
             ),
           ],
@@ -171,7 +168,7 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  _buildCustomerNote() {
+  Widget _buildCustomerNote() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.0),
       child: Column(
@@ -237,7 +234,7 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  _buildQuantitySelector() {
+  Widget _buildQuantitySelector() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.0),
       child: Row(
@@ -268,7 +265,7 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  _buildBottomBar() {
+  Widget _buildBottomBar() {
     return Container(
       color: Colors.amber[50],
       padding: EdgeInsets.all(12.0),
@@ -284,7 +281,7 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
           ),
           Text(
-            '${(widget.price * _quantity).toStringAsFixed(2)} TL',
+            '${(_quantity * widget.menuItem.price).toStringAsFixed(2)} TL',
             style: const TextStyle(
               fontSize: 15.0,
               fontWeight: FontWeight.bold,
@@ -305,10 +302,10 @@ class _ProductDetailState extends State<ProductDetail> {
               onPressed: () {
                 // Sepete ekleme işlemi burada yapılabilir
                 Provider.of<Cart>(context, listen: false).addItem(
-                  widget.name,
-                  widget.price,
+                  widget.menuItem.name,
+                  widget.menuItem.price,
                   _quantity,
-                  imageUrl: widget.imageUrl,
+                  imageUrl: widget.menuItem.imageUrl,
                 );
 
                 // Sepet sayfasına yönlendirme

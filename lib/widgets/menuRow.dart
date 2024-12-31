@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_cafe_app/models/menuItem.dart';
 import 'package:my_cafe_app/screens/productDetail.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 import 'package:provider/provider.dart';
@@ -34,10 +35,11 @@ class MenuRow extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => ProductDetail(
-              name: name,
-              description: description,
-              price: price,
-              imageUrl: imageUrl,
+              menuItem: MenuItem(
+                  name: name,
+                  description: description,
+                  price: price,
+                  imageUrl: imageUrl),
             ),
           ),
         );
