@@ -1,16 +1,18 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:my_cafe_app/screens/registerPage.dart'; // RegisterPage import edin
+import 'package:my_cafe_app/screens/register_screen.dart';
+import 'package:my_cafe_app/services/user_service.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          // Arka plan resmi
           // Arka plan resmi
           Container(
             decoration: BoxDecoration(
@@ -22,10 +24,9 @@ class LoginPage extends StatelessWidget {
           ),
           // Bulanıklaştırma efekti
           BackdropFilter(
-            filter: ImageFilter.blur(
-                sigmaX: 5.0, sigmaY: 5.0), // Bulanıklık derecesi
+            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
             child: Container(
-              color: Colors.black.withOpacity(0.5), // Opak arka plan
+              color: Colors.black.withOpacity(0.5),
             ),
           ),
           // Geri butonu
@@ -51,7 +52,6 @@ class LoginPage extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.amber,
                       fontSize: 36.0,
-                      //  fontWeight: FontWeight.bold,
                       fontFamily: "Retosta",
                     ),
                     textAlign: TextAlign.center,
@@ -59,16 +59,17 @@ class LoginPage extends StatelessWidget {
                   Text(
                     'Hoşgeldiniz!',
                     style: TextStyle(
-                        color: AppColors.kirikbeyaz,
-                        fontSize: 32.0,
-                        //  fontWeight: FontWeight.bold,
-                        fontFamily: "Retosta"),
+                      color: AppColors.kirikbeyaz,
+                      fontSize: 32.0,
+                      fontFamily: "Retosta",
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 32.0),
                   TextField(
+                    controller: emailController,
                     decoration: InputDecoration(
-                      labelText: 'Kullanıcı Adı/E-mail',
+                      labelText: 'E-mail',
                       labelStyle: TextStyle(color: AppColors.kirikbeyaz),
                       filled: true,
                       fillColor: Colors.white.withOpacity(0.3),
@@ -88,6 +89,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   SizedBox(height: 16.0),
                   TextField(
+                    controller: passwordController,
                     decoration: InputDecoration(
                       labelText: 'Şifre',
                       labelStyle: TextStyle(color: AppColors.kirikbeyaz),
@@ -101,9 +103,7 @@ class LoginPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.blue,
-                        ),
+                        borderSide: BorderSide(color: Colors.blue),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
@@ -112,8 +112,19 @@ class LoginPage extends StatelessWidget {
                   ),
                   SizedBox(height: 32.0),
                   ElevatedButton(
-                    onPressed: () {
-                      // Giriş işlemleri
+                    onPressed: () async {
+                      try {
+                        final user = await UserService.login(
+                          emailController.text,
+                          passwordController.text,
+                        );
+                        if (user != null) {
+                          Navigator.pop(context);
+                        }
+                      } catch (e) {
+                        // Giriş hatasını yönet
+                        print('Giriş başarısız: $e');
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
@@ -143,7 +154,7 @@ class LoginPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RegisterPage()),
+                                builder: (context) => RegisterScreen()),
                           );
                         },
                         style: TextButton.styleFrom(

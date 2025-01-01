@@ -1,15 +1,22 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:my_cafe_app/screens/loginPage.dart';
+import 'package:my_cafe_app/screens/login_screen.dart';
+import 'package:my_cafe_app/services/user_service.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
@@ -50,10 +57,9 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           // Bulanıklaştırma efekti
           BackdropFilter(
-            filter: ImageFilter.blur(
-                sigmaX: 5.0, sigmaY: 5.0), // Bulanıklık derecesi
+            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
             child: Container(
-              color: Colors.black.withOpacity(0.5), // Opak arka plan
+              color: Colors.black.withOpacity(0.5),
             ),
           ),
           // Geri butonu
@@ -96,34 +102,35 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
+                          controller: firstNameController, // Controller eklendi
                           decoration: _buildInputDecoration('Ad'),
                           style: TextStyle(
                             color: AppColors.kirikbeyaz,
-                            decoration:
-                                TextDecoration.none, // Alt çizgiyi kaldır
+                            decoration: TextDecoration.none,
                           ),
                         ),
                         SizedBox(height: 16.0),
                         TextFormField(
+                          controller: lastNameController, // Controller eklendi
                           decoration: _buildInputDecoration('Soyad'),
                           style: TextStyle(
                             color: AppColors.kirikbeyaz,
-                            decoration:
-                                TextDecoration.none, // Alt çizgiyi kaldır
+                            decoration: TextDecoration.none,
                           ),
                         ),
                         SizedBox(height: 16.0),
                         TextFormField(
+                          controller: emailController, // Controller eklendi
                           decoration: _buildInputDecoration('Email'),
                           keyboardType: TextInputType.emailAddress,
                           style: TextStyle(
                             color: AppColors.kirikbeyaz,
-                            decoration:
-                                TextDecoration.none, // Alt çizgiyi kaldır
+                            decoration: TextDecoration.none,
                           ),
                         ),
                         SizedBox(height: 16.0),
                         TextFormField(
+                          controller: passwordController, // Controller eklendi
                           decoration: _buildInputDecoration('Şifre').copyWith(
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -142,13 +149,14 @@ class _RegisterPageState extends State<RegisterPage> {
                           obscureText: _obscurePassword,
                           style: TextStyle(
                             color: AppColors.kirikbeyaz,
-                            decoration:
-                                TextDecoration.none, // Alt çizgiyi kaldır
+                            decoration: TextDecoration.none,
                           ),
                         ),
                         SizedBox(height: 16.0),
                         TextFormField(
-                          cursorColor: Colors.amber, // İmleç rengi
+                          controller:
+                              confirmPasswordController, // Controller eklendi
+                          cursorColor: Colors.amber,
                           decoration:
                               _buildInputDecoration('Şifre Tekrar').copyWith(
                             suffixIcon: IconButton(
@@ -169,15 +177,30 @@ class _RegisterPageState extends State<RegisterPage> {
                           obscureText: _obscureConfirmPassword,
                           style: TextStyle(
                             color: AppColors.kirikbeyaz,
-                            decoration:
-                                TextDecoration.none, // Alt çizgiyi kaldır
+                            decoration: TextDecoration.none,
                           ),
                         ),
                         SizedBox(height: 32.0),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              // Kayıt işlemleri
+                              try {
+                                await UserService.register(
+                                  firstNameController.text,
+                                  lastNameController.text,
+                                  emailController.text,
+                                  passwordController.text,
+                                );
+                                // Kayıt başarılı, giriş ekranına yönlendir
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()),
+                                );
+                              } catch (e) {
+                                // Kayıt hatasını yönet
+                                print('Kayıt başarısız: $e');
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -207,7 +230,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginPage()),
+                                      builder: (context) => LoginScreen()),
                                 );
                               },
                               style: TextButton.styleFrom(

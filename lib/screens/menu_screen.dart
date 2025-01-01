@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'package:my_cafe_app/models/category.dart';
 import 'package:my_cafe_app/models/menuItem.dart';
 import 'package:my_cafe_app/screens/cart_screen.dart';
+import 'package:my_cafe_app/screens/login_screen.dart';
 import 'package:my_cafe_app/services/category_service.dart';
 import 'package:my_cafe_app/services/menu_service.dart';
 import 'package:my_cafe_app/widgets/menuRow.dart';
-import 'package:my_cafe_app/screens/loginPage.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -59,7 +58,7 @@ class _MenuScreenState extends State<MenuScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
+                MaterialPageRoute(builder: (context) => LoginScreen()),
               );
             },
           ),
