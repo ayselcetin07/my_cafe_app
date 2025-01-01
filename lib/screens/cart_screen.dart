@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:my_cafe_app/models/cart.dart';
+import 'package:my_cafe_app/models/cart.dart'; // Cart sınıfını içe aktar
+import 'package:my_cafe_app/models/menuItem.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 import 'package:provider/provider.dart';
 
-class CartPage extends StatefulWidget {
+class CartScreen extends StatefulWidget {
   @override
-  _CartPageState createState() => _CartPageState();
+  _CartScreenState createState() => _CartScreenState();
 }
 
-class _CartPageState extends State<CartPage> {
+class _CartScreenState extends State<CartScreen> {
   String _selectedOrderType = 'Yerinde Yemek';
   final List<String> _orderTypes = ['Yerinde Yemek', 'Paket'];
-
-  Color _buttonColor = Colors.green;
 
   @override
   Widget build(BuildContext context) {
@@ -25,40 +24,115 @@ class _CartPageState extends State<CartPage> {
             Navigator.of(context).pop();
           },
         ),
-        backgroundColor: Colors.brown,
+        backgroundColor: AppColors.brown,
         title: const Text(
           "Sepet",
           style: TextStyle(
               color: AppColors.kirikbeyaz, fontFamily: "Times New Roman"),
         ),
       ),
-      body: _buildBody(context),
+      body: Container(
+        color: Colors.amber[50], // Burada tek renk belirtiyoruz
+        child: Consumer<Cart>(
+          builder: (context, cart, child) {
+            return ListView.builder(
+              itemCount: cart.items.length,
+              itemBuilder: (context, index) {
+                final item = cart.items[index];
+                return _buildCartItem(context, item);
+              },
+            );
+          },
+        ),
+      ),
       bottomNavigationBar: _buildBottomBar(context),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    return Container(
-      color: Color(0XFFFCFDF5), // Burada arka plan rengini ayarlayabilirsiniz
-      child: Column(
-        children: [
-          Expanded(
-            child: Container(
-              height: 100.0, // Belirli bir yükseklik ayarlayın
-              child: Scrollbar(
-                child: ListView.builder(
-                  itemCount: Provider.of<Cart>(context).items.length,
-                  itemBuilder: (context, index) {
-                    final item = Provider.of<Cart>(context).items[index];
-                    return _buildCartItem(context, item);
-                  },
+  Widget _buildCartItem(BuildContext context, Map<String, dynamic> item) {
+    return Card(
+      color: Color(0XFFFFFDD0),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.black, width: 2),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      margin: EdgeInsets.all(8.0),
+      child: ListTile(
+        tileColor: Color(0XFFFCFDF5),
+        leading: Image.asset(
+          item['imageUrl'],
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover,
+        ),
+        title: Text(
+          item['name'],
+          style: TextStyle(
+            fontSize: 15.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        subtitle: Row(
+          children: [
+            Expanded(
+              child: Text(
+                "${(item['price'] * item['quantity']).toStringAsFixed(2)} TL",
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.red,
                 ),
+                overflow: TextOverflow.clip,
               ),
             ),
-          ),
-          _buildOrderTypeCard(),
-          _buildTableNumberCard(),
-        ],
+          ],
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.remove, color: Colors.black),
+              onPressed: () {
+                if (item['quantity'] > 1) {
+                  Provider.of<Cart>(context, listen: false).addItem(
+                    MenuItem(
+                      name: item['name'],
+                      description: '',
+                      price: item['price'],
+                      imageUrl: item['imageUrl'],
+                    ),
+                    -1,
+                  );
+                }
+              },
+            ),
+            Text(
+              item['quantity'].toString(),
+              style: TextStyle(fontSize: 18.0, color: Colors.red),
+            ),
+            IconButton(
+              icon: Icon(Icons.add, color: Colors.black),
+              onPressed: () {
+                Provider.of<Cart>(context, listen: false).addItem(
+                  MenuItem(
+                    name: item['name'],
+                    description: '',
+                    price: item['price'],
+                    imageUrl: item['imageUrl'],
+                  ),
+                  1,
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.brown),
+              onPressed: () {
+                Provider.of<Cart>(context, listen: false)
+                    .removeItem(item['name']);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -134,7 +208,7 @@ class _CartPageState extends State<CartPage> {
         child: Text(
           'Masa 3',
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.kirikbeyaz,
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
           ),
@@ -144,95 +218,23 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget _buildCartItem(BuildContext context, Map<String, dynamic> item) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.black, width: 2),
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      margin: EdgeInsets.all(8.0),
-      child: ListTile(
-        tileColor: Color(
-            0XFFFCFDF5), // Burada item arka plan rengini ayarlayabilirsiniz
-        leading: Image.network(
-          item["imageUrl"],
-          width: 50,
-          height: 50,
-          fit: BoxFit.cover,
-        ),
-        title: Text(
-          item["name"],
-          style: TextStyle(
-            fontSize: 17.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        subtitle: Row(
-          children: [
-            Expanded(
-              child: Text(
-                "${(item["price"] * item["quantity"]).toStringAsFixed(2)} TL",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.red,
-                ),
-                overflow: TextOverflow.clip,
-              ),
-            ),
-          ],
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Icon(Icons.remove, color: Colors.brown),
-              onPressed: () {
-                if (item["quantity"] > 1) {
-                  Provider.of<Cart>(context, listen: false).addItem(
-                    item["name"],
-                    item["price"],
-                    -1,
-                    imageUrl: item["imageUrl"],
-                  );
-                }
-              },
-            ),
-            Text(
-              item["quantity"].toString(),
-              style: TextStyle(fontSize: 18.0),
-            ),
-            IconButton(
-              icon: Icon(Icons.add, color: Colors.brown),
-              onPressed: () {
-                Provider.of<Cart>(context, listen: false).addItem(
-                  item["name"],
-                  item["price"],
-                  1,
-                  imageUrl: item["imageUrl"],
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.delete, color: Colors.red),
-              onPressed: () {
-                Provider.of<Cart>(context, listen: false)
-                    .removeItem(item["name"]);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildBottomBar(BuildContext context) {
     return Container(
-      color: Color(0XFFF8F9E9),
+      color: Colors.amber[50],
       padding: EdgeInsets.all(12.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Container(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                _buildOrderTypeCard(),
+                _buildTableNumberCard(),
+              ],
+            ),
+          ),
+          Divider(color: Colors.black),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -266,14 +268,14 @@ class _CartPageState extends State<CartPage> {
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _buttonColor,
+                    backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0), // Oval köşeler
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                   ),
                   onPressed: () {
-                    //sipariş tamamlama işlemi burada yapılabilir
+                    // Siparişi tamamlama işlemi burada yapılabilir
                   },
                   child: Text('Siparişi Tamamla'),
                 ),
@@ -285,7 +287,7 @@ class _CartPageState extends State<CartPage> {
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0), // Oval köşeler
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                   ),
                   onPressed: () {

@@ -1,40 +1,36 @@
 import 'package:flutter/material.dart';
+import 'menuItem.dart';
 
 class Cart with ChangeNotifier {
-  List<Map<String, dynamic>> _items = [];
+  final List<Map<String, dynamic>> _items = [];
 
   List<Map<String, dynamic>> get items => _items;
 
-  double get totalPrice {
-    return _items.fold(
-        0.0, (sum, item) => sum + (item["price"] * item["quantity"]));
-  }
+  double get totalPrice => _items.fold(
+      0, (total, current) => total + current['price'] * current['quantity']);
 
-  void addItem(String name, double price, int quantity, {String? imageUrl}) {
-    final index = _items.indexWhere((item) => item["name"] == name);
+  void addItem(MenuItem menuItem, int quantity) {
+    final index = _items.indexWhere((item) => item['name'] == menuItem.name);
     if (index >= 0) {
-      _items[index]["quantity"] += quantity;
-      if (_items[index]["quantity"] <= 0) {
-        _items.removeAt(index);
-      }
+      _items[index]['quantity'] += quantity;
     } else {
       _items.add({
-        "name": name,
-        "price": price,
-        "quantity": quantity,
-        "imageUrl": imageUrl ?? '' // imageUrl boşsa boş string olarak ekle
+        'name': menuItem.name,
+        'price': menuItem.price,
+        'quantity': quantity,
+        'imageUrl': menuItem.imageUrl,
       });
     }
     notifyListeners();
   }
 
-  void clearCart() {
-    _items.clear();
+  void removeItem(String name) {
+    _items.removeWhere((item) => item['name'] == name);
     notifyListeners();
   }
 
-  void removeItem(String name) {
-    _items.removeWhere((item) => item["name"] == name);
+  void clearCart() {
+    _items.clear();
     notifyListeners();
   }
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:my_cafe_app/models/category.dart';
 import 'package:my_cafe_app/models/menuItem.dart';
+import 'package:my_cafe_app/screens/cart_screen.dart';
 import 'package:my_cafe_app/services/category_service.dart';
 import 'package:my_cafe_app/services/menu_service.dart';
 import 'package:my_cafe_app/widgets/menuRow.dart';
-import 'package:my_cafe_app/screens/cartPage.dart';
 import 'package:my_cafe_app/screens/loginPage.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 
@@ -50,7 +50,7 @@ class _MenuScreenState extends State<MenuScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CartPage()),
+                MaterialPageRoute(builder: (context) => CartScreen()),
               );
             },
           ),
@@ -66,7 +66,7 @@ class _MenuScreenState extends State<MenuScreen> {
         ],
       ),
       body: Container(
-        color: Color.fromARGB(255, 124, 85, 56),
+        color: AppColors.brown,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

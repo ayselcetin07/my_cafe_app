@@ -36,10 +36,11 @@ class MenuRow extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => ProductDetail(
               menuItem: MenuItem(
-                  name: name,
-                  description: description,
-                  price: price,
-                  imageUrl: imageUrl),
+                name: name,
+                description: description,
+                price: price,
+                imageUrl: imageUrl,
+              ),
             ),
           ),
         );
@@ -55,7 +56,11 @@ class MenuRow extends StatelessWidget {
               Image.asset(imageUrl, width: 50, height: 50, fit: BoxFit.cover),
           title: Text(
             name,
-            style: TextStyle(color: Colors.black, fontSize: 18.0),
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 17.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Times New Roman"),
           ),
           subtitle: Text(
             description,
@@ -75,8 +80,15 @@ class MenuRow extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.add, color: Colors.red),
                 onPressed: () {
-                  Provider.of<Cart>(context, listen: false)
-                      .addItem(name, price, 1, imageUrl: imageUrl);
+                  Provider.of<Cart>(context, listen: false).addItem(
+                    MenuItem(
+                      name: name,
+                      description: description,
+                      price: price,
+                      imageUrl: imageUrl,
+                    ),
+                    1,
+                  );
                 },
               ),
             ],

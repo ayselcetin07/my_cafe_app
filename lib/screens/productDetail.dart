@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_cafe_app/models/cart.dart';
-import 'package:my_cafe_app/screens/cartPage.dart';
+import 'package:my_cafe_app/screens/cart_screen.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:my_cafe_app/models/menuItem.dart';
@@ -29,7 +29,7 @@ class _ProductDetailState extends State<ProductDetail> {
             Navigator.of(context).pop();
           },
         ),
-        backgroundColor: Colors.brown,
+        backgroundColor: AppColors.brown,
         title: const Text(
           "Product Detail",
           style: TextStyle(
@@ -195,7 +195,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     borderSide: BorderSide(color: AppColors.brown),
                   ),
                   filled: true,
-                  fillColor: Colors.brown,
+                  fillColor: AppColors.brown,
                 ),
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
@@ -241,7 +241,10 @@ class _ProductDetailState extends State<ProductDetail> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            icon: const Icon(Icons.remove),
+            icon: const Icon(
+              Icons.remove,
+              color: Colors.black,
+            ),
             onPressed: () {
               setState(() {
                 if (_quantity > 1) _quantity--;
@@ -253,7 +256,7 @@ class _ProductDetailState extends State<ProductDetail> {
             style: const TextStyle(fontSize: 20.0, color: Colors.red),
           ),
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.add, color: Colors.black),
             onPressed: () {
               setState(() {
                 _quantity++;
@@ -293,7 +296,7 @@ class _ProductDetailState extends State<ProductDetail> {
             width: MediaQuery.of(context).size.width / 2,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.brown,
+                backgroundColor: AppColors.brown,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
@@ -302,16 +305,14 @@ class _ProductDetailState extends State<ProductDetail> {
               onPressed: () {
                 // Sepete ekleme işlemi burada yapılabilir
                 Provider.of<Cart>(context, listen: false).addItem(
-                  widget.menuItem.name,
-                  widget.menuItem.price,
+                  widget.menuItem,
                   _quantity,
-                  imageUrl: widget.menuItem.imageUrl,
                 );
 
                 // Sepet sayfasına yönlendirme
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CartPage()),
+                  MaterialPageRoute(builder: (context) => CartScreen()),
                 );
               },
               child: Text('Sepete Ekle'),
