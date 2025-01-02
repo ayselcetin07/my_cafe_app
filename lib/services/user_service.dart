@@ -1,40 +1,48 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:my_cafe_app/models/user.dart';
+import '../models/user.dart';
 
-class UserService {
-  static const String _baseUrl = 'http://192.168.1.103:3000/api/users';
+Future<void> registerUser(User user) async {
+  final response = await http.post(
+    Uri.parse('http://192.168.1.103:3000/users/register'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'firstName': user.firstName,
+      'lastName': user.lastName,
+      'email': user.email,
+      'password': user.password,
+    }),
+  );
 
-  static Future<User?> login(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return User.fromJson(data['user']);
-    } else {
-      throw Exception('Failed to login');
-    }
+  if (response.statusCode == 201) {
+    print('Kullanıcı başarıyla kaydedildi');
+  } else if (response.statusCode == 400) {
+    print('Kullanıcı zaten kayıtlı');
+  } else {
+    throw Exception('Kullanıcı kaydedilemedi');
   }
+}
 
-  static Future<void> register(
-      String firstName, String lastName, String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/register'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'firstName': firstName,
-        'lastName': lastName,
-        'email': email,
-        'password': password
-      }),
-    );
+Future<String> loginUser(String email, String password) async {
+  final response = await http.post(
+    Uri.parse('http://192.168.1.103:3000/users/login'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'email': email,
+      'password': password,
+    }),
+  );
 
-    if (response.statusCode != 201) {
-      throw Exception('Failed to register');
-    }
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body)['token'];
+  } else if (response.statusCode == 400) {
+    print('Kullanıcı bulunamadı veya yanlış şifre');
+    throw Exception('Kullanıcı bulunamadı veya yanlış şifre');
+  } else {
+    throw Exception('Giriş yapılamadı');
   }
 }

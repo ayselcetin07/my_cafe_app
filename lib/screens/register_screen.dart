@@ -1,7 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:my_cafe_app/screens/login_screen.dart';
-import 'package:my_cafe_app/services/user_service.dart';
+import '../services/user_service.dart';
+import '../models/user.dart';
+import 'login_screen.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -10,17 +11,13 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
   bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
 
-  // Ortak kullanılan InputDecoration
   InputDecoration _buildInputDecoration(String labelText) {
     return InputDecoration(
       labelText: labelText,
@@ -41,12 +38,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  Future<void> _register() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        User user = User(
+          firstName: _firstNameController.text,
+          lastName: _lastNameController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+        await registerUser(user);
+        print('Kayıt başarılı');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      } catch (e) {
+        print('Kayıt başarısız: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Kayıt başarısız: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          // Arka plan resmi
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -55,14 +75,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
           ),
-          // Bulanıklaştırma efekti
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
             child: Container(
               color: Colors.black.withOpacity(0.5),
             ),
           ),
-          // Geri butonu
           Positioned(
             top: 40.0,
             left: 16.0,
@@ -73,7 +91,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               },
             ),
           ),
-          // Kayıt formu
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -102,35 +119,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
-                          controller: firstNameController, // Controller eklendi
+                          controller: _firstNameController,
                           decoration: _buildInputDecoration('Ad'),
                           style: TextStyle(
                             color: AppColors.kirikbeyaz,
                             decoration: TextDecoration.none,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Adınızı giriniz';
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(height: 16.0),
                         TextFormField(
-                          controller: lastNameController, // Controller eklendi
+                          controller: _lastNameController,
                           decoration: _buildInputDecoration('Soyad'),
                           style: TextStyle(
                             color: AppColors.kirikbeyaz,
                             decoration: TextDecoration.none,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Soyadınızı giriniz';
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(height: 16.0),
                         TextFormField(
-                          controller: emailController, // Controller eklendi
+                          controller: _emailController,
                           decoration: _buildInputDecoration('Email'),
                           keyboardType: TextInputType.emailAddress,
                           style: TextStyle(
                             color: AppColors.kirikbeyaz,
                             decoration: TextDecoration.none,
                           ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Email adresinizi giriniz';
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(height: 16.0),
                         TextFormField(
-                          controller: passwordController, // Controller eklendi
+                          controller: _passwordController,
                           decoration: _buildInputDecoration('Şifre').copyWith(
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -151,58 +186,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColors.kirikbeyaz,
                             decoration: TextDecoration.none,
                           ),
-                        ),
-                        SizedBox(height: 16.0),
-                        TextFormField(
-                          controller:
-                              confirmPasswordController, // Controller eklendi
-                          cursorColor: Colors.amber,
-                          decoration:
-                              _buildInputDecoration('Şifre Tekrar').copyWith(
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscureConfirmPassword
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: AppColors.kirikbeyaz,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscureConfirmPassword =
-                                      !_obscureConfirmPassword;
-                                });
-                              },
-                            ),
-                          ),
-                          obscureText: _obscureConfirmPassword,
-                          style: TextStyle(
-                            color: AppColors.kirikbeyaz,
-                            decoration: TextDecoration.none,
-                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Şifrenizi giriniz';
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(height: 32.0),
                         ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              try {
-                                await UserService.register(
-                                  firstNameController.text,
-                                  lastNameController.text,
-                                  emailController.text,
-                                  passwordController.text,
-                                );
-                                // Kayıt başarılı, giriş ekranına yönlendir
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginScreen()),
-                                );
-                              } catch (e) {
-                                // Kayıt hatasını yönet
-                                print('Kayıt başarısız: $e');
-                              }
-                            }
-                          },
+                          onPressed: _register,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
                             foregroundColor: Colors.white,

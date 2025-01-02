@@ -1,12 +1,39 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:my_cafe_app/screens/register_screen.dart';
-import 'package:my_cafe_app/services/user_service.dart';
+import 'package:my_cafe_app/screens/cart_screen.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
+import '../services/user_service.dart';
+import 'register_screen.dart';
 
-class LoginScreen extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    try {
+      // Giriş verilerini temizleyin
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+
+      String token = await loginUser(email, password);
+      print('Giriş başarılı, token: $token');
+      // Giriş başarılı olduğunda ekrana uyarı mesajı gösterin
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Girişiniz başarıyla gerçekleşmiştir!')),
+      );
+      // Token'ı saklayın ve uygulamanızda kullanın
+    } catch (e) {
+      print('Giriş başarısız: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Giriş başarısız: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +94,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 32.0),
                   TextField(
-                    controller: emailController,
+                    controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'E-mail',
                       labelStyle: TextStyle(color: AppColors.kirikbeyaz),
@@ -89,7 +116,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 16.0),
                   TextField(
-                    controller: passwordController,
+                    controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Şifre',
                       labelStyle: TextStyle(color: AppColors.kirikbeyaz),
@@ -112,20 +139,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 32.0),
                   ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        final user = await UserService.login(
-                          emailController.text,
-                          passwordController.text,
-                        );
-                        if (user != null) {
-                          Navigator.pop(context);
-                        }
-                      } catch (e) {
-                        // Giriş hatasını yönet
-                        print('Giriş başarısız: $e');
-                      }
-                    },
+                    onPressed: _login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,

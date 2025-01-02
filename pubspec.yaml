@@ -32,7 +32,8 @@ dependencies:
     sdk: flutter
   provider: ^6.0.0
   mongo_dart: ^0.9.0
-  http: ^1.2.2  
+  http: ^1.2.2 
+  
    
 
 
