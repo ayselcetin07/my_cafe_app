@@ -67,6 +67,17 @@ class _LoginScreenState extends State<LoginScreen> {
               },
             ),
           ),
+          // Çıkış butonu
+          Positioned(
+            top: 40.0,
+            right: 16.0,
+            child: IconButton(
+              icon: Icon(Icons.close, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
           // Login formu
           Center(
             child: SingleChildScrollView(
