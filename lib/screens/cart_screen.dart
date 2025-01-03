@@ -1,8 +1,10 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:my_cafe_app/models/cart.dart'; // Cart sınıfını içe aktar
 import 'package:my_cafe_app/models/menuItem.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 import 'package:provider/provider.dart';
+import 'payment_screen.dart'; // PaymentScreen'i içe aktar
 
 class CartScreen extends StatefulWidget {
   @override
@@ -32,7 +34,7 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
       body: Container(
-        color: Colors.amber[50], // Burada tek renk belirtiyoruz
+        color: Color(0XFFFFFFEA), // Burada tek renk belirtiyoruz
         child: Consumer<Cart>(
           builder: (context, cart, child) {
             return ListView.builder(
@@ -51,7 +53,6 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget _buildCartItem(BuildContext context, Map<String, dynamic> item) {
     return Card(
-      color: Color(0XFFFFFDD0),
       shape: RoundedRectangleBorder(
         side: BorderSide(color: Colors.black, width: 2),
         borderRadius: BorderRadius.circular(8.0),
@@ -220,7 +221,7 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget _buildBottomBar(BuildContext context) {
     return Container(
-      color: Colors.amber[50],
+      color: Color(0XFFFFFFEA),
       padding: EdgeInsets.all(12.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -275,7 +276,10 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ),
                   onPressed: () {
-                    // Siparişi tamamlama işlemi burada yapılabilir
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PaymentScreen()),
+                    );
                   },
                   child: Text('Siparişi Tamamla'),
                 ),
