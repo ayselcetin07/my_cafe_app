@@ -4,6 +4,7 @@ import '../services/user_service.dart';
 import '../models/user.dart';
 import 'login_screen.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
+import '../utilities/validators.dart'; // Validators dosyasını import ediyoruz
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -15,6 +16,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
 
@@ -156,12 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColors.kirikbeyaz,
                             decoration: TextDecoration.none,
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Email adresinizi giriniz';
-                            }
-                            return null;
-                          },
+                          validator: validateEmail,
                         ),
                         SizedBox(height: 16.0),
                         TextFormField(
@@ -186,12 +184,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColors.kirikbeyaz,
                             decoration: TextDecoration.none,
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Şifrenizi giriniz';
-                            }
-                            return null;
-                          },
+                          validator: validatePassword,
+                        ),
+                        SizedBox(height: 16.0),
+                        TextFormField(
+                          controller: _confirmPasswordController,
+                          decoration:
+                              _buildInputDecoration('Şifre Tekrar').copyWith(
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: AppColors.kirikbeyaz,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
+                          ),
+                          obscureText: _obscurePassword,
+                          style: TextStyle(
+                            color: AppColors.kirikbeyaz,
+                            decoration: TextDecoration.none,
+                          ),
+                          validator: (value) => validateConfirmPassword(
+                              value, _passwordController.text),
                         ),
                         SizedBox(height: 32.0),
                         ElevatedButton(
