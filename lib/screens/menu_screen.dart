@@ -26,8 +26,8 @@ class _MenuScreenState extends State<MenuScreen> {
   void initState() {
     super.initState();
     selectedCategory = widget.selectedCategory;
-    _menuItems = fetchMenuItems(selectedCategory);
-    _categories = fetchCategories();
+    _menuItems = MenuService().fetchMenuItems(selectedCategory);
+    _categories = CategoryService().fetchCategories();
   }
 
   @override
@@ -133,7 +133,7 @@ class _MenuScreenState extends State<MenuScreen> {
         onPressed: () {
           setState(() {
             selectedCategory = title;
-            _menuItems = fetchMenuItems(selectedCategory);
+            _menuItems = MenuService().fetchMenuItems(selectedCategory);
           });
         },
         style: ElevatedButton.styleFrom(

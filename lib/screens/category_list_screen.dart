@@ -14,7 +14,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
   @override
   void initState() {
     super.initState();
-    _categories = fetchCategories();
+    _categories = CategoryService().fetchCategories();
   }
 
   @override

@@ -50,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           email: _emailController.text,
           password: _passwordController.text,
         );
-        await registerUser(user);
+        await UserService().registerUser(user);
         print('Kayıt başarılı');
         Navigator.push(
           context,

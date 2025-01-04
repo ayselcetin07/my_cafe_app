@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
       String email = _emailController.text.trim();
       String password = _passwordController.text.trim();
 
-      String token = await loginUser(email, password);
+      String token = await UserService().loginUser(email, password);
       print('Giriş başarılı, token: $token');
       // Giriş başarılı olduğunda ekrana uyarı mesajı gösterin
       ScaffoldMessenger.of(context).showSnackBar(
