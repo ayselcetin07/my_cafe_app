@@ -24,7 +24,7 @@ class _ProductDetailState extends State<ProductDetail> {
       appBar: AppBar(
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.chevron_left, size: 40.0, color: Colors.black),
+          icon: Icon(Icons.chevron_left, size: 32.0, color: Colors.black),
           onPressed: () {
             Navigator.of(context).pop();
           },
