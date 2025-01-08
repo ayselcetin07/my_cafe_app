@@ -22,11 +22,17 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Category List",
-          style: TextStyle(color: Colors.black),
+          "Kategoriler",
+          style: TextStyle(color: Colors.black, fontFamily: "Times New Roman"),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left, size: 32.0, color: Colors.black),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: Container(
         color: Color.fromARGB(255, 124, 85, 56),

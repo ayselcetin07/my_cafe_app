@@ -49,14 +49,11 @@ class CategoryListRow extends StatelessWidget {
                     child: Text(
                       name,
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 18.0,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Roboto',
                         fontStyle: FontStyle.italic,
                         color: const Color.fromARGB(255, 9, 9, 9),
-                        decoration: TextDecoration.underline,
-                        decorationColor: const Color.fromARGB(255, 0, 0, 0),
-                        decorationThickness: 2.0,
                       ),
                       textAlign: TextAlign.center, // Metni ortala
                     ),
