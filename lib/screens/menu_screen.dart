@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:my_cafe_app/models/category.dart';
 import 'package:my_cafe_app/models/menuItem.dart';
+import 'package:my_cafe_app/models/cart.dart';
 import 'package:my_cafe_app/screens/cart_screen.dart';
 import 'package:my_cafe_app/screens/login_screen.dart';
 import 'package:my_cafe_app/services/category_service.dart';
@@ -21,6 +23,7 @@ class _MenuScreenState extends State<MenuScreen> {
   late String selectedCategory;
   late Future<List<MenuItem>> _menuItems;
   late Future<List<Category>> _categories;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -30,35 +33,98 @@ class _MenuScreenState extends State<MenuScreen> {
     _categories = CategoryService().fetchCategories();
   }
 
+  void _scrollToSelectedCategory(List<Category> categories) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final index = categories
+          .indexWhere((category) => category.name == selectedCategory);
+      if (index != -1) {
+        _scrollController.animateTo(
+          index *
+              100.0, // Her bir kategori butonunun genişliğine göre ayarlayın
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "Menü",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: Colors.black,
+            fontFamily: "Times New Roman",
+          ),
         ),
         backgroundColor: AppColors.kirikbeyaz,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left, size: 32.0, color: Colors.black),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CartScreen()),
+          Consumer<Cart>(
+            builder: (context, cart, child) {
+              return Stack(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.shopping_cart,
+                      color: Colors.black,
+                      size: 26,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CartScreen()),
+                      );
+                    },
+                  ),
+                  if (cart.itemCount > 0)
+                    Positioned(
+                      right: 3,
+                      top: 2,
+                      child: Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 18,
+                          minHeight: 18,
+                        ),
+                        child: Text(
+                          '${cart.itemCount}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
               );
             },
           ),
           IconButton(
-            icon: Icon(Icons.person, color: Colors.black),
+            icon: Icon(
+              Icons.person,
+              color: Colors.black,
+              size: 28,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        LoginScreen(selectedCategory: selectedCategory)),
               );
             },
           ),
@@ -79,9 +145,13 @@ class _MenuScreenState extends State<MenuScreen> {
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return Center(child: Text('No categories found'));
                 } else {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _scrollToSelectedCategory(snapshot.data!);
+                  });
                   return Container(
                     height: 50.0,
                     child: ListView(
+                      controller: _scrollController,
                       scrollDirection: Axis.horizontal,
                       children: snapshot.data!.map((category) {
                         return buildCategoryButton(category.name);
@@ -134,6 +204,9 @@ class _MenuScreenState extends State<MenuScreen> {
           setState(() {
             selectedCategory = title;
             _menuItems = MenuService().fetchMenuItems(selectedCategory);
+            _categories.then((categories) {
+              _scrollToSelectedCategory(categories);
+            });
           });
         },
         style: ElevatedButton.styleFrom(

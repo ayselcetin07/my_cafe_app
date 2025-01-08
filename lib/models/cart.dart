@@ -9,6 +9,9 @@ class Cart with ChangeNotifier {
   double get totalPrice => _items.fold(
       0, (total, current) => total + current['price'] * current['quantity']);
 
+  int get itemCount =>
+      _items.fold(0, (total, current) => total + current['quantity'] as int);
+
   void addItem(MenuItem menuItem, int quantity) {
     final index = _items.indexWhere((item) => item['name'] == menuItem.name);
     if (index >= 0) {
