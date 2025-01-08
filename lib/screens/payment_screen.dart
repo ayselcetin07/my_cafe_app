@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:my_cafe_app/models/cart.dart'; // Cart sınıfını içe aktar
+import 'package:my_cafe_app/screens/category_list_screen.dart'; // Kategori listesi ekranını içe aktar
 
 class PaymentScreen extends StatefulWidget {
   @override
@@ -40,9 +41,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
     if (_formKey.currentState!.validate()) {
       // Ödeme işlemi burada yapılabilir
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ödeme işlemi başarılı!')),
+        SnackBar(content: Text('Ödemeniz başarıyla alınmıştır!')),
       );
-      Navigator.pop(context);
+
+      // Sepeti boşalt
+      Provider.of<Cart>(context, listen: false).clearCart();
+
+      // Kategori listesi ekranına yönlendir
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => CategoryListScreen()),
+      );
     }
   }
 
@@ -141,18 +150,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           style: TextStyle(color: Colors.white),
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(5),
+                            LengthLimitingTextInputFormatter(4),
                             TextInputFormatter.withFunction(
                                 (oldValue, newValue) {
-                              if (newValue.text.length == 2 &&
-                                  !newValue.text.contains('/')) {
-                                return TextEditingValue(
-                                  text: '${newValue.text}/',
-                                  selection: TextSelection.collapsed(
-                                      offset: newValue.selection.end + 1),
-                                );
+                              String newText = newValue.text;
+                              if (newText.length >= 2) {
+                                newText = newText.substring(0, 2) +
+                                    '/' +
+                                    newText.substring(2);
                               }
-                              return newValue;
+                              return TextEditingValue(
+                                text: newText,
+                                selection: TextSelection.collapsed(
+                                    offset: newText.length),
+                              );
                             }),
                           ],
                           validator: (value) {
@@ -161,6 +172,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             }
                             if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(value)) {
                               return 'Geçerli bir tarih formatı giriniz (MM/YY)';
+                            }
+                            final parts = value.split('/');
+                            final month = int.tryParse(parts[0]);
+                            final year = int.tryParse(parts[1]);
+                            if (month == null || month < 1 || month > 12) {
+                              return 'Geçerli bir ay giriniz (01-12)';
+                            }
+                            if (year == null || year < 24) {
+                              return 'Geçerli bir yıl giriniz (24 veya sonrası)';
                             }
                             return null;
                           },
