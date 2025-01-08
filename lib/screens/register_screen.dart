@@ -3,10 +3,15 @@ import 'package:flutter/material.dart';
 import '../services/user_service.dart';
 import '../models/user.dart';
 import 'login_screen.dart';
+import 'menu_screen.dart'; // MenuScreen'i içe aktarın
 import 'package:my_cafe_app/utilities/constants.dart';
 import '../utilities/validators.dart'; // Validators dosyasını import ediyoruz
 
 class RegisterScreen extends StatefulWidget {
+  final String selectedCategory;
+
+  RegisterScreen({required this.selectedCategory});
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -54,7 +59,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         print('Kayıt başarılı');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  LoginScreen(selectedCategory: widget.selectedCategory)),
         );
       } catch (e) {
         print('Kayıt başarısız: $e');
@@ -88,9 +95,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
             top: 40.0,
             left: 16.0,
             child: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.white),
+              icon: Icon(Icons.chevron_left, color: Colors.white),
               onPressed: () {
                 Navigator.pop(context);
+              },
+            ),
+          ),
+          Positioned(
+            top: 40.0,
+            right: 16.0,
+            child: IconButton(
+              icon: Icon(Icons.close, color: Colors.white),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MenuScreen(
+                          selectedCategory: widget.selectedCategory)),
+                );
               },
             ),
           ),
@@ -243,7 +265,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginScreen()),
+                                      builder: (context) => LoginScreen(
+                                          selectedCategory:
+                                              widget.selectedCategory)),
                                 );
                               },
                               style: TextButton.styleFrom(
