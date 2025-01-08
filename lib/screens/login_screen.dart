@@ -1,11 +1,15 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:my_cafe_app/screens/cart_screen.dart';
 import 'package:my_cafe_app/utilities/constants.dart';
 import '../services/user_service.dart';
 import 'register_screen.dart';
+import 'menu_screen.dart'; // MenuScreen'i içe aktarın
 
 class LoginScreen extends StatefulWidget {
+  final String selectedCategory;
+
+  LoginScreen({required this.selectedCategory});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -13,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true;
 
   Future<void> _login() async {
     try {
@@ -74,7 +79,12 @@ class _LoginScreenState extends State<LoginScreen> {
             child: IconButton(
               icon: Icon(Icons.close, color: Colors.white),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MenuScreen(
+                          selectedCategory: widget.selectedCategory)),
+                );
               },
             ),
           ),
@@ -144,8 +154,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderSide: BorderSide(color: Colors.blue),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: AppColors.kirikbeyaz,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      ),
                     ),
-                    obscureText: true,
+                    obscureText: _obscureText,
                     style: TextStyle(color: AppColors.kirikbeyaz),
                   ),
                   SizedBox(height: 32.0),
@@ -179,7 +202,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RegisterScreen()),
+                                builder: (context) => RegisterScreen(
+                                      selectedCategory: widget.selectedCategory,
+                                    )),
                           );
                         },
                         style: TextButton.styleFrom(
