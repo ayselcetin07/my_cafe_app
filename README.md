@@ -20,13 +20,19 @@ flutter node.js mongoDB ile geliştirilmiş bir cafe sipariş uygulaması
 >>>>>>> 172e84fb03c5773fc5face57b5437f590f3eb7d8
 
 ## Screenshots
-<div style="display: flex; margin: 100 px;">
+<div style="display: flex; margin: 50 px;">
 <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/anasayfa.jpg" alt="anasayfa resmi" width="20%">
+</div>
+<div style="display: flex; margin: 50 px;">
 <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/kategoriler1.jpg" alt="kategoriler sayfası" width="20%">
 <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/kategoriler2.jpg" alt="kategoriler sayfası2" width="20%">
+</div>
+<div style="display: flex; margin: 50 px;">
 <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/menu1.jpg" alt="menu sayfası" width="20%">
 <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/menu2.jpg" alt="menu sayfası2" width="20%">
 <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/menu3.jpg"  alt="menu sayfası3" width="20%">
+</div>
+<div style="display: flex; margin: 50 px;">
 <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/productdetail1.jpg"  alt="detay sayfası" width="20%">
 <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/productdetail2.jpg"  alt="detay sayfası" width="20%">
 
