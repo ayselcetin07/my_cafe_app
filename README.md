@@ -20,4 +20,4 @@ flutter node.js mongoDB ile geliştirilmiş bir cafe sipariş uygulaması
 >>>>>>> 172e84fb03c5773fc5face57b5437f590f3eb7d8
 
 ## Screenshots
-<img src="C:\flutter_demos\my_cafe_app\assets\screenshots\anasayfa.jpg" alt="anasayfa resmi" width="40%"> 
+![anasayfa resmi ](https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/anasayfa.jpg)
