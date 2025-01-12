@@ -47,7 +47,7 @@ Bu proje, Flutter, MongoDB ve Node.js kullanarak geliştirilmiş bir mobil kafe 
         ```
     - Node.js sunucusunu çalıştırmak için:
         ```bash
-        npm start
+        node server.js
         ```
 
 ## Katkıda Bulunma
