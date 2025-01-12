@@ -30,7 +30,7 @@ flutter node.js mongoDB ile geliştirilmiş bir cafe sipariş uygulaması
     <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/kategoriler1.jpg" alt="kategoriler sayfası" width="20%" ">
     <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/kategoriler2.jpg" alt="kategoriler sayfası2" width="20%" ">
 </div>
-<br><\br>
+<br></br>
 <div style="padding: 20 px;">
     <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/menu1.jpg" alt="menu sayfası" width="20%">
     <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/menu2.jpg" alt="menu sayfası2" width="20%">
@@ -51,25 +51,15 @@ flutter node.js mongoDB ile geliştirilmiş bir cafe sipariş uygulaması
 <div style="padding: 20 px;">
     <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/odeme.jpg" alt="odeme sayfası" width="20%">
  <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/odeme1.jpg" alt="odeme sayfası" width="20%">
- <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/odeme2.jpg" alt="odeme sayfası" width="20%">
- <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/odeme3.jpg" alt="odeme sayfası" width="20%">
- <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/odeme4.jpg" alt="odeme sayfası" width="20%">
+
     <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/odemebasarili.jpg" alt="odemebasarili " width="20%">
 </div>
 
 <div style="padding: 20 px;">
     <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/login.jpg" alt="login" width="20%">
-    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/login1.jpg" alt="login" width="20%">
-    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/login2.jpg" alt="login" width="20%">
+      <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/register.jpg" alt="register" width="20%">
 </div>
 
-<div style="padding: 20 px;">
-    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/register.jpg" alt="register" width="20%">
-    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/register1.jpg" alt="register" width="20%">
-    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/register2.jpg" alt="register" width="20%">
-    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/register3.jpg" alt="register" width="20%">
-    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/register4.jpg" alt="register" width="20%">
-</div>
 
 
 
