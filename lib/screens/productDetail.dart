@@ -31,7 +31,7 @@ class _ProductDetailState extends State<ProductDetail> {
         ),
         backgroundColor: AppColors.brown,
         title: const Text(
-          "Product Detail",
+          "Detay",
           style: TextStyle(
               color: AppColors.kirikbeyaz, fontFamily: "Times New Roman"),
         ),
