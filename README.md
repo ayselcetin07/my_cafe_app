@@ -26,8 +26,8 @@ flutter node.js mongoDB ile geliştirilmiş bir cafe sipariş uygulaması
 </div>
 
 <div style="padding: 20px;">
-    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/kategoriler1.jpg" alt="kategoriler sayfası" width="20%" style="margin-top: 50px;">
-    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/kategoriler2.jpg" alt="kategoriler sayfası2" width="20%" style="margin-right: 50px;">
+    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/kategoriler1.jpg" alt="kategoriler sayfası" width="20%" style="margin-bottom: 50px;">
+    <img src="https://github.com/ayselcetin07/my_cafe_app/blob/main/assets/screenshots/kategoriler2.jpg" alt="kategoriler sayfası2" width="20%" style="margin-bottom: 50px;">
 </div>
 
 <div style="padding: 20px;">
